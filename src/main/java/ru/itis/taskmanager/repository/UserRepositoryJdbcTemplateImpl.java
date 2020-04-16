@@ -64,12 +64,18 @@ public class UserRepositoryJdbcTemplateImpl implements UserRepository {
 
     @Override
     public Optional<User> findUserByEmail(String email) {
-        String sql = "SELECT * FROM user WHERE email = ?";
+        String sql = "SELECT * FROM user WHERE email = ? LIMIT 1";
         try {
             User user = jdbcTemplate.queryForObject(sql, new Object[]{email}, userRowMapper);
             return Optional.of(user);
         } catch (EmptyResultDataAccessException e) {
             return Optional.empty();
         }
+    }
+
+    @Override
+    public List<User> findUsersByName(String name) {
+        String sql = "SELECT * FROM user WHERE name LIKE ?";
+        return jdbcTemplate.query(sql, new Object[]{"%" + name + "%"}, userRowMapper);
     }
 }

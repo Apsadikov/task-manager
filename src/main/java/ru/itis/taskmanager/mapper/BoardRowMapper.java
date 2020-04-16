@@ -12,7 +12,8 @@ import java.sql.SQLException;
 public class BoardRowMapper implements RowMapper<Board> {
     @Override
     public Board mapRow(ResultSet row, int rowNum) throws SQLException {
-        return Board.builder().title(row.getString("title"))
+        return Board.builder()
+                .title(row.getString("title"))
                 .id(row.getLong("id"))
                 .build();
     }

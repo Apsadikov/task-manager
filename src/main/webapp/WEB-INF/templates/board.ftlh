@@ -10,14 +10,13 @@
     <link rel="stylesheet" href="/static/css/base.css">
     <link rel="stylesheet" href="/static/css/board.css">
     <link rel="stylesheet" href="/static/fontawesome-free-5.13.0-web/css/all.min.css">
-
 </head>
-<body>
+<body id="body" data-csrf="${_csrf.token}" data-id="${boardId}" data-user="${userId}">
 <div class="wrapper">
     <div class="header-wrapper">
         <div class="header-small">
-            <div class="app-name">Task Manager</div>
-            <div><a href="/logout" class="link"><i class="fas fa-sign-out-alt"></i> Logout</a></div>
+            <div class="app-name"><a href="/" class="white">Task Manager</a></div>
+            <div class="link"><a href="/logout" class="white"><i class="fas fa-sign-out-alt"></i> Logout</a></div>
         </div>
         <div class="header-chat">CHAT</div>
     </div>
@@ -25,121 +24,153 @@
         <div class="board">
             <div class="board-header shadow">
                 <div class="board-title">Title</div>
-                <div class="members hidden">
-                    <div class="member">
-                        <img src="../image/2.png" alt="">
-                    </div>
-                    <div class="member">
-                        <img src="../image/3.png" alt="">
-                    </div>
-                    <div class="member">
-                        <img src="../image/4.png" alt="">
-                    </div>
-                </div>
-                <div class="add-user hidden">
+                <div class="add-member" id="add-member">
                     <i class="fas fa-user-plus"></i>
-                    Add user
+                    Add member
                 </div>
             </div>
-            <div class="search-box hidden">
+            <div class="search-box hidden" id="search-box">
                 <div class="search-wrapper shadow">
-                    <input type="text" class="search" placeholder="Enter user email.."><i class="fas fa-search"></i>
+                    <input type="text" id="query" class="search" placeholder="Enter name..">
+                    <i class="fas fa-search" id="search"></i>
                 </div>
-                <div class="result hidden">
-                    <div class="users shadow">
-                        <div class="user">
-                            <div class="avatar-small">
-                                <img src="../image/2.png" alt="">
-                            </div>
-                            <div class="name-small">User</div>
-                        </div>
-                        <div class="user">
-                            <div class="avatar-small">
-                                <img src="../image/4.png" alt="">
-                            </div>
-                            <div class="name-small">User</div>
-                        </div>
-                        <div class="user">
-                            <div class="avatar-small">
-                                <img src="../image/4.png" alt="">
-                            </div>
-                            <div class="name-small">User</div>
-                        </div>
-                        <div class="user">
-                            <div class="avatar-small">
-                                <img src="../image/2.png" alt="">
-                            </div>
-                            <div class="name-small">User</div>
-                        </div>
-                        <div class="user">
-                            <div class="avatar-small">
-                                <img src="../image/3.png" alt="">
-                            </div>
-                            <div class="name-small">User</div>
-                        </div>
+                <div class="result">
+                    <div class="users shadow hidden" id="users">
                     </div>
                 </div>
             </div>
-            <div class="cards">
-                <div class="card shadow">
-                    <div class="title">New card</div>
+            <div class="lists">
+                <div class="list-wrapper first-list">
+                    <div class="new-list">
+                        <div class="new-list-form">
+                            <input type="text" class="input" placeholder="Title..">
+                            <i class="fas fa-check"></i>
+                        </div>
+                    </div>
                 </div>
-                <div class="card shadow">
-                    <div class="title">New card</div>
+                <div class="list-wrapper">
+                    <div class="list">
+                        <div class="list-title">Title</div>
+                        <div class="cards">
+                            <div class="card shadow last-card new-card">
+                                <input type="text" placeholder="Title" class="input">
+                                <i class="fas fa-check"></i>
+                            </div>
+                            <div class="card shadow last-card">
+                                <div class="card-title">Card title</div>
+                            </div>
+                            <div class="card shadow last-card">
+                                <div class="card-title">Card title</div>
+                            </div>
+                            <div class="card shadow last-card">
+                                <div class="card-title">Card title</div>
+                            </div>
+                            <div class="card shadow last-card">
+                                <div class="card-title">Card title</div>
+                            </div>
+                            <div class="card shadow last-card">
+                                <div class="card-title">Card title</div>
+                            </div>
+                            <div class="card shadow last-card">
+                                <div class="card-title">Card title</div>
+                            </div>
+                            <div class="card shadow last-card">
+                                <div class="card-title">Card title</div>
+                            </div>
+                            <div class="card shadow last-card">
+                                <div class="card-title">Card title</div>
+                            </div>
+                            <div class="card shadow last-card">
+                                <div class="card-title">Card title</div>
+                            </div>
+                            <div class="card shadow last-card">
+                                <div class="card-title">Card title</div>
+                            </div>
+                            <div class="card shadow last-card">
+                                <div class="card-title">Card title</div>
+                            </div>
+                            <div class="card shadow last-card">
+                                <div class="card-title">Card title</div>
+                            </div>
+                            <div class="card shadow last-card">
+                                <div class="card-title">Card title</div>
+                            </div>
+                        </div>
+                        <div>
+                            <div class="add-small">
+                                <i class="fas fa-plus fa-lg"></i>
+                            </div>
+                        </div>
+                    </div>
                 </div>
-                <div class="card shadow">
-                    <div class="title">New card</div>
+                <div class="list-wrapper">
+                    <div class="list">
+                        <div class="list-title">Title</div>
+                        <div class="cards">
+                            <div class="card shadow last-card">
+                                <div class="card-title">Card title</div>
+                            </div>
+                            <div class="card shadow last-card">
+                                <div class="card-title">Card title</div>
+                            </div>
+                            <div class="card shadow last-card">
+                                <div class="card-title">Card title</div>
+                            </div>
+                        </div>
+                        <div class="add-small">
+                            <i class="fas fa-plus fa-lg"></i>
+                        </div>
+                    </div>
                 </div>
-                <div class="card shadow">
-                    <div class="title">New card</div>
+                <div class="list-wrapper">
+                    <div class="list">
+                        <div class="list-title">Title</div>
+                        <div class="cards">
+                            <div class="card shadow last-card">
+                                <div class="card-title">Card title</div>
+                            </div>
+                            <div class="card shadow last-card">
+                                <div class="card-title">Card title</div>
+                            </div>
+                            <div class="card shadow last-card">
+                                <div class="card-title">Card title</div>
+                            </div>
+                            <div class="card shadow last-card">
+                                <div class="card-title">Card title</div>
+                            </div>
+                            <div class="card shadow last-card">
+                                <div class="card-title">Card title</div>
+                            </div>
+                            <div class="card shadow last-card">
+                                <div class="card-title">Card title</div>
+                            </div>
+                        </div>
+                        <div class="add-small">
+                            <i class="fas fa-plus fa-lg"></i>
+                        </div>
+                    </div>
                 </div>
-                <div class="card shadow">
-                    <div class="title">New card</div>
-                </div>
-                <div class="card shadow">
-                    <div class="title">New card</div>
-                </div>
-                <div class="card shadow">
-                    <div class="title">New card</div>
-                </div>
-                <div class="card shadow">
-                    <div class="title">New card</div>
+                <div class="list-wrapper last-list">
+                    <div class="list">
+                        <div class="list-title">Title</div>
+                        <div class="cards">
+                            <div class="card shadow last-card">
+                                <div class="card-title">Card title</div>
+                            </div>
+                        </div>
+                        <div class="add-small">
+                            <i class="fas fa-plus fa-lg"></i>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
         <div class="chat">
-            <div class="messages">
-                <div class="light-message-wrapper">
-                    <div class="light-message">
-                        <div class="name">User</div>
-                        Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-                    </div>
-                </div>
-                <div class="light-message-wrapper">
-                    <div class="light-message">
-                        <div class="name">User</div>
-                        Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-                    </div>
-                </div>
-                <div class="blue-message">Lorem ipsum dolor sit amet, consectetur adipiscing elit.</div>
-                <div class="light-message-wrapper">
-                    <div class="light-message">
-                        <div class="name">User</div>
-                        Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-                    </div>
-                </div>
-                <div class="blue-message">Lorem ipsum dolor sit amet, consectetur adipiscing elit.</div>
-                <div class="blue-message">Lorem ipsum dolor sit amet, consectetur adipiscing elit.</div>
-                <div class="light-message-wrapper">
-                    <div class="light-message">
-                        <div class="name">User</div>
-                        Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-                    </div>
-                </div>
+            <div class="messages" id="messages">
             </div>
             <div class="message-box">
-                <input type="text" class="text" placeholder="Message..">
-                <div class="button"><i class="fas fa-paper-plane"></i></div>
+                <input type="text" class="text" placeholder="Message.." id="message">
+                <div class="button"><i class="fas fa-paper-plane" id="send"></i></div>
             </div>
         </div>
     </div>
@@ -257,5 +288,10 @@
         </div>
     </div>
 </div>
+<script
+        src="https://code.jquery.com/jquery-3.4.1.min.js"
+        integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo="
+        crossorigin="anonymous"></script>
+<script src="/static/js/board.js"></script>
 </body>
 </html>

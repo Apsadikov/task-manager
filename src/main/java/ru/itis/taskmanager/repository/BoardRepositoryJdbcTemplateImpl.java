@@ -57,7 +57,7 @@ public class BoardRepositoryJdbcTemplateImpl implements BoardRepository {
             PreparedStatement statement = connection
                     .prepareStatement("INSERT INTO user_board (user_id, board_id) VALUE (?, ?)",
                             Statement.RETURN_GENERATED_KEYS);
-            statement.setLong(1, board.getUser().getId());
+            statement.setLong(1, board.getUsers().get(0).getId());
             statement.setLong(2, board.getId());
             return statement;
         }, keyHolder);

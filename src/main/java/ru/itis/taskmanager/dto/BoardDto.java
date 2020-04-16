@@ -5,7 +5,6 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import ru.itis.taskmanager.entity.Board;
-import ru.itis.taskmanager.entity.User;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -17,10 +16,13 @@ import java.util.stream.Collectors;
 public class BoardDto {
     private Long id;
     private String title;
-    private User user;
+    private List<UserDto> users;
 
     public static BoardDto from(Board board) {
-        return BoardDto.builder().id(board.getId()).title(board.getTitle()).build();
+        return BoardDto.builder()
+                .id(board.getId())
+                .title(board.getTitle())
+                .build();
     }
 
     public static List<BoardDto> from(List<Board> boards) {

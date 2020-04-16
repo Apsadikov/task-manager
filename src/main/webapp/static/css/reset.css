@@ -246,7 +246,7 @@ input[type="reset"],
 input[type="submit"] {
     -webkit-appearance: button; /* 2 */
     cursor: pointer; /* 3 */
-    *overflow: visible;  /* 4 */
+    *overflow: visible; /* 4 */
 }
 
 /**
@@ -333,7 +333,6 @@ textarea {
     color: #222;
 }
 
-
 ::-moz-selection {
     background: #b3d4fc;
     text-shadow: none;
@@ -369,4 +368,8 @@ button {
     background: transparent;
     border: none;
     outline: none;
+}
+
+a {
+    text-decoration: none;
 }

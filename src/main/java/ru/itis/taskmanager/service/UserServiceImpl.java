@@ -6,6 +6,8 @@ import ru.itis.taskmanager.dto.UserDto;
 import ru.itis.taskmanager.entity.User;
 import ru.itis.taskmanager.repository.UserRepository;
 
+import java.util.List;
+
 @Service
 public class UserServiceImpl implements UserService {
     private UserRepository userRepository;
@@ -16,7 +18,12 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public UserDto signUp(UserDto userDto) {
+    public List<UserDto> findUsers(String name) {
+        return UserDto.from(userRepository.findUsersByName(name));
+    }
+
+    @Override
+    public void signUp(UserDto userDto) {
         User user = User.builder()
                 .email(userDto.getEmail())
                 .password(userDto.getPassword())
@@ -24,7 +31,5 @@ public class UserServiceImpl implements UserService {
                 .build();
         userRepository.save(user);
         userDto.setId(user.getId());
-
-        return userDto;
     }
 }

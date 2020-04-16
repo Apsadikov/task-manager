@@ -1,9 +1,11 @@
 package ru.itis.taskmanager.service;
 
-import org.springframework.stereotype.Service;
 import ru.itis.taskmanager.dto.UserDto;
 
-@Service
+import java.util.List;
+
 public interface UserService {
-    UserDto signUp(UserDto userDto);
+    List<UserDto> findUsers(String name);
+
+    void signUp(UserDto userDto);
 }

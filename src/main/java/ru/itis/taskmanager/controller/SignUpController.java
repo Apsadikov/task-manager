@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import ru.itis.taskmanager.dto.UserDto;
@@ -20,10 +21,13 @@ public class SignUpController {
 
     @GetMapping("/sign-up")
     @PreAuthorize("permitAll()")
-    public String signUp(Authentication authentication) {
+    public String signUp(Authentication authentication, Model model) {
         if (authentication != null) {
             return "redirect:/";
         }
+        model.addAttribute("css", "sign-up");
+        model.addAttribute("link", "/sign-in");
+        model.addAttribute("linkTitle", "Sign In");
         return "sign-up";
     }
 
