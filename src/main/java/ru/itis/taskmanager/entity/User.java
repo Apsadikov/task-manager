@@ -5,22 +5,18 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.util.List;
+import java.io.Serializable;
 
 @AllArgsConstructor
 @NoArgsConstructor
 @Data
 @Builder
-public class User {
+public class User implements Serializable {
     private Long id;
 
     private String email;
 
     private String passwordHash;
 
-    private String password;
-
     private String name;
-
-    private List<Board> boards;
 }

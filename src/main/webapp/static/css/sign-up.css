@@ -20,7 +20,7 @@
     text-align: center;
 }
 
-.sign-in-form {
+.sign-in-form, .sign-up-form {
     padding: 20px 40px 40px;
     display: flex;
     flex-direction: column;

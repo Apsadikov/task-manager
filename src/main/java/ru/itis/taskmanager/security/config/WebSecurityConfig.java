@@ -9,6 +9,7 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.web.authentication.rememberme.PersistentTokenRepository;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 import ru.itis.taskmanager.security.details.UserDetailsServiceImpl;
 
@@ -18,28 +19,34 @@ import ru.itis.taskmanager.security.details.UserDetailsServiceImpl;
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     private UserDetailsServiceImpl userDetailsService;
     private BCryptPasswordEncoder bCryptPasswordEncoder;
+    private final PersistentTokenRepository persistentTokenRepository;
 
     @Autowired
     public WebSecurityConfig(@Qualifier(value = "customUserDetailsService") UserDetailsServiceImpl userDetailsService,
-                             BCryptPasswordEncoder bCryptPasswordEncoder) {
+                             BCryptPasswordEncoder bCryptPasswordEncoder, PersistentTokenRepository persistentTokenRepository) {
         this.userDetailsService = userDetailsService;
         this.bCryptPasswordEncoder = bCryptPasswordEncoder;
+        this.persistentTokenRepository = persistentTokenRepository;
     }
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-        http.authorizeRequests()
-                .antMatchers("/logout").permitAll();
+        http.authorizeRequests();
 
         http.formLogin()
                 .loginPage("/sign-in")
                 .usernameParameter("email")
                 .defaultSuccessUrl("/")
-                .failureUrl("/sign-in")
-                .permitAll();
+                .failureUrl("/sign-in?error=true")
+                .loginProcessingUrl("/sign-in")
+                .permitAll()
+                .and()
+                .rememberMe()
+                .rememberMeParameter("remember-me").tokenRepository(persistentTokenRepository);
 
         http.logout().logoutRequestMatcher(new AntPathRequestMatcher("/logout"))
-                .logoutSuccessUrl("/sign-in").deleteCookies("JSESSIONID")
+                .logoutSuccessUrl("/sign-in")
+                .deleteCookies("JSESSIONID", "remember-me")
                 .clearAuthentication(true)
                 .invalidateHttpSession(true);
     }

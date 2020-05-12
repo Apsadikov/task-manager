@@ -68,3 +68,23 @@ body {
 .white {
     color: #ffffff;
 }
+
+.current-language {
+    color: #ffffff;
+    margin-right: 20px;
+    position: relative;
+    font-weight: 600;
+    text-decoration: none;
+}
+
+.languages {
+    position: absolute;
+    display: none;
+    margin-top: 10px;
+    background-color: #fff;
+}
+
+.language {
+    color: #000000;
+    padding: 0 40px;
+}

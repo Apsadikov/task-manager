@@ -2,6 +2,7 @@ package ru.itis.taskmanager.mapper;
 
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Component;
+import ru.itis.taskmanager.entity.Role;
 import ru.itis.taskmanager.entity.User;
 
 import java.sql.ResultSet;

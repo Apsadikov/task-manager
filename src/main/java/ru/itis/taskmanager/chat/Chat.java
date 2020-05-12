@@ -1,6 +1,7 @@
 package ru.itis.taskmanager.chat;
 
 import org.springframework.stereotype.Component;
+import ru.itis.taskmanager.dto.Client;
 import ru.itis.taskmanager.dto.MessageDto;
 
 import java.util.ArrayList;
@@ -12,9 +13,7 @@ public class Chat {
     private final List<Client> clients = new ArrayList<>();
 
     public void join(Client newClient) {
-        if (!isPresent(newClient)) {
-            clients.add(newClient);
-        }
+        clients.add(newClient);
     }
 
     public boolean isPresent(Client foundClient) {

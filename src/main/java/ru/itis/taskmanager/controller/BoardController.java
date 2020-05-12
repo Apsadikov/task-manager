@@ -33,7 +33,7 @@ public class BoardController {
         model.addAttribute("boardId", id);
         model.addAttribute("css", "home");
         model.addAttribute("link", "/logout");
-        model.addAttribute("linkTitle", "Logout");
+        model.addAttribute("linkTitle", "logout");
         model.addAttribute("userId", user.getId());
         return "board";
     }

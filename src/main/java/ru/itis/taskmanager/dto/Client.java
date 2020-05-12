@@ -1,4 +1,4 @@
-package ru.itis.taskmanager.chat;
+package ru.itis.taskmanager.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

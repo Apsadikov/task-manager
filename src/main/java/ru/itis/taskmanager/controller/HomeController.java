@@ -26,7 +26,7 @@ public class HomeController {
         model.addAttribute("boards", boardService.getAllBoards(user.getId()));
         model.addAttribute("css", "home");
         model.addAttribute("link", "/logout");
-        model.addAttribute("linkTitle", "Logout");
+        model.addAttribute("linkTitle", "logout");
         return "home";
     }
 }

@@ -1,6 +1,7 @@
 <#macro extends css link linkTitle icon>
+    <#import "/spring.ftl" as spring/>
 <!DOCTYPE HTML>
-<html lang="en">
+<html>
 <head>
     <meta charset="UTF-8">
     <meta name="viewport"
@@ -16,10 +17,30 @@
 <div class="header-wrapper">
     <div class="header">
         <div class="app-name"><a href="/" class="white">Task Manager</a></div>
-        <div class="link"><a href="${link}" class="white"><i class="fas ${icon}"></i> ${linkTitle}</a></div>
+        <div class="current-language">
+            <div id="language">
+                <@spring.message code='lang' />
+            </div>
+            <div class="languages shadow" id="languages">
+                <a href="?lang=ru" class="language">Русский</a>
+                <a href="?lang=en" class="language">English</a>
+            </div>
+        </div>
+        <div class="link">
+            <a href="${link}" class="white"><i class="fas ${icon}"></i> <@spring.message code='${linkTitle}' /></a>
+        </div>
     </div>
 </div>
 <#nested>
+<script>
+    let language = document.getElementById("language");
+    let languages = document.getElementById("languages");
+    let toggle = false;
+    language.onclick = function () {
+        languages.style.display = !toggle ? "block" : "none";
+        toggle = !toggle;
+    }
+</script>
 </body>
 </html>
 </#macro>

@@ -20,6 +20,5 @@ public class SpringContextServletContextListener implements ServletContextListen
 
     @Override
     public void contextDestroyed(ServletContextEvent servletContextEvent) {
-
     }
 }
