@@ -1,11 +1,17 @@
 package ru.itis.taskmanager.service;
 
+import org.springframework.data.domain.Page;
+import org.springframework.stereotype.Service;
 import ru.itis.taskmanager.dto.BoardDto;
+import ru.itis.taskmanager.entity.Board;
 
-import java.util.List;
+import java.util.Optional;
 
+@Service
 public interface BoardService {
-    List<BoardDto> getAllBoards(Long userId);
+    Page<BoardDto> getBoards(Long memberId, Integer page);
 
-    void save(BoardDto boardDto);
+    Optional<Board> getBoard(Long boardId);
+
+    void addBoard(BoardDto boardDto);
 }

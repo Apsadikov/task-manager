@@ -1,21 +1,29 @@
 package ru.itis.taskmanager.entity;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
+import javax.persistence.*;
 import java.util.List;
 
 @AllArgsConstructor
 @NoArgsConstructor
-@Data
 @Builder
+@Entity
+@Getter
+@Setter
+@Table(name = "board")
 public class Board {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Column(nullable = false)
     private String title;
 
-    private List<User> users;
+    @OneToMany(mappedBy = "board")
+    private List<BoardMember> boardMembers;
 
+//    @OneToMany(mappedBy = "board")
+//    @Fetch(value = FetchMode.SUBSELECT)
+//    private List<Stack> stacks;
 }

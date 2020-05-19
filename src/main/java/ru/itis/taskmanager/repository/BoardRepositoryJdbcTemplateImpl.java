@@ -42,7 +42,7 @@ public class BoardRepositoryJdbcTemplateImpl implements BoardRepository {
     }
 
     @Override
-    public void save(Board board) {
+    public Board save(Board board) {
         KeyHolder keyHolder = new GeneratedKeyHolder();
         jdbcTemplate.update(connection -> {
             PreparedStatement statement = connection
@@ -61,6 +61,7 @@ public class BoardRepositoryJdbcTemplateImpl implements BoardRepository {
             statement.setLong(2, board.getId());
             return statement;
         }, keyHolder);
+        return board;
     }
 
     @Override

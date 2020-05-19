@@ -1,16 +1,14 @@
 package ru.itis.taskmanager.entity;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.io.Serializable;
 
 @AllArgsConstructor
 @NoArgsConstructor
-@Data
 @Builder
+@Getter
+@Setter
 public class User implements Serializable {
     private Long id;
 
@@ -19,4 +17,10 @@ public class User implements Serializable {
     private String passwordHash;
 
     private String name;
+
+    private String confirmationToken;
+
+    private boolean isConfirmed;
+
+    private Role role;
 }

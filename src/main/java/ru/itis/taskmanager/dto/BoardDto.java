@@ -15,14 +15,15 @@ import java.util.stream.Collectors;
 @Builder
 public class BoardDto {
     private Long id;
+
     private String title;
-    private List<UserDto> users;
+
+    private Long userId;
 
     public static BoardDto from(Board board) {
         return BoardDto.builder()
-                .id(board.getId())
                 .title(board.getTitle())
-                .build();
+                .id(board.getId()).build();
     }
 
     public static List<BoardDto> from(List<Board> boards) {

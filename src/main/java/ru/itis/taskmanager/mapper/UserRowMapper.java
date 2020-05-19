@@ -17,6 +17,9 @@ public class UserRowMapper implements RowMapper<User> {
                 .id(row.getLong("id"))
                 .passwordHash(row.getString("password_hash"))
                 .email(row.getString("email"))
+                .confirmationToken(row.getString("confirmation_token"))
+                .role(row.getString("role") == null ? null : Role.valueOf(row.getString("role")))
+                .isConfirmed(row.getBoolean("is_confirmed"))
                 .name(row.getString("name"))
                 .build();
     }

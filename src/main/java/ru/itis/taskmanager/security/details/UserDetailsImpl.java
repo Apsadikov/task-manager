@@ -17,7 +17,7 @@ public class UserDetailsImpl implements UserDetails {
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return Collections.emptyList();
+        return Collections.singleton(new SimpleGrantedAuthority(user.getRole().name()));
     }
 
     @Override
@@ -37,7 +37,7 @@ public class UserDetailsImpl implements UserDetails {
 
     @Override
     public boolean isAccountNonLocked() {
-        return true;
+        return user.isConfirmed();
     }
 
     @Override

@@ -9,6 +9,7 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.web.authentication.AuthenticationFailureHandler;
 import org.springframework.security.web.authentication.rememberme.PersistentTokenRepository;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 import ru.itis.taskmanager.security.details.UserDetailsServiceImpl;
@@ -17,28 +18,33 @@ import ru.itis.taskmanager.security.details.UserDetailsServiceImpl;
 @EnableWebSecurity
 @EnableGlobalMethodSecurity(prePostEnabled = true)
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
+    private PersistentTokenRepository persistentTokenRepository;
     private UserDetailsServiceImpl userDetailsService;
     private BCryptPasswordEncoder bCryptPasswordEncoder;
-    private final PersistentTokenRepository persistentTokenRepository;
+    private AuthenticationFailureHandler authenticationFailureHandler;
 
     @Autowired
     public WebSecurityConfig(@Qualifier(value = "customUserDetailsService") UserDetailsServiceImpl userDetailsService,
-                             BCryptPasswordEncoder bCryptPasswordEncoder, PersistentTokenRepository persistentTokenRepository) {
+                             BCryptPasswordEncoder bCryptPasswordEncoder, PersistentTokenRepository persistentTokenRepository, AuthenticationFailureHandler authenticationFailureHandler) {
         this.userDetailsService = userDetailsService;
         this.bCryptPasswordEncoder = bCryptPasswordEncoder;
         this.persistentTokenRepository = persistentTokenRepository;
+        this.authenticationFailureHandler = authenticationFailureHandler;
     }
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-        http.authorizeRequests();
+        http.authorizeRequests()
+                .antMatchers("/css/**", "/js/**", "/img/**").permitAll()
+                .antMatchers("/chat").authenticated()
+                .antMatchers("/sign-in-error").anonymous();
 
         http.formLogin()
                 .loginPage("/sign-in")
                 .usernameParameter("email")
                 .defaultSuccessUrl("/")
-                .failureUrl("/sign-in?error=true")
                 .loginProcessingUrl("/sign-in")
+                .failureHandler(authenticationFailureHandler)
                 .permitAll()
                 .and()
                 .rememberMe()

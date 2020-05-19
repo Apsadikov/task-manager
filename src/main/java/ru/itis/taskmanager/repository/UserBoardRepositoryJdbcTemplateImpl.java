@@ -37,7 +37,7 @@ public class UserBoardRepositoryJdbcTemplateImpl implements UserBoardRepository 
     }
 
     @Override
-    public void save(UserBoard userBoard) {
+    public UserBoard save(UserBoard userBoard) {
         KeyHolder keyHolder = new GeneratedKeyHolder();
         jdbcTemplate.update(connection -> {
             PreparedStatement statement = connection
@@ -47,6 +47,7 @@ public class UserBoardRepositoryJdbcTemplateImpl implements UserBoardRepository 
             statement.setLong(2, userBoard.getBoard().getId());
             return statement;
         }, keyHolder);
+        return userBoard;
     }
 
     @Override

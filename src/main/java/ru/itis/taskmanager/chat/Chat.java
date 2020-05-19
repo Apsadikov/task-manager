@@ -1,7 +1,6 @@
 package ru.itis.taskmanager.chat;
 
 import org.springframework.stereotype.Component;
-import ru.itis.taskmanager.dto.Client;
 import ru.itis.taskmanager.dto.MessageDto;
 
 import java.util.ArrayList;

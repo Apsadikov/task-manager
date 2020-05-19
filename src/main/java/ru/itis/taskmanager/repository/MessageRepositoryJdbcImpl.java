@@ -45,7 +45,7 @@ public class MessageRepositoryJdbcImpl implements MessageRepository {
     }
 
     @Override
-    public void save(Message entity) {
+    public Message save(Message entity) {
         if (userBoardRepository.isUserHasBoard(entity.getUser().getId(), entity.getBoard().getId())) {
             KeyHolder keyHolder = new GeneratedKeyHolder();
             jdbcTemplate.update(connection -> {
@@ -59,7 +59,9 @@ public class MessageRepositoryJdbcImpl implements MessageRepository {
             }, keyHolder);
 
             entity.setId(keyHolder.getKey().longValue());
+            return entity;
         }
+        return entity;
     }
 
     @Override

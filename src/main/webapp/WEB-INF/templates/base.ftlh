@@ -1,7 +1,7 @@
 <#macro extends css link linkTitle icon>
     <#import "/spring.ftl" as spring/>
 <!DOCTYPE HTML>
-<html>
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport"
@@ -11,12 +11,12 @@
     <link rel="stylesheet" href="/static/css/reset.css">
     <link rel="stylesheet" href="/static/css/base.css">
     <link rel="stylesheet" href="/static/css/${css}.css">
-    <link rel="stylesheet" href="/static/fontawesome-free-5.13.0-web/css/all.min.css">
+    <link rel="stylesheet" href="/static/fontawesome/css/all.min.css">
 </head>
 <body>
 <div class="header-wrapper">
     <div class="header">
-        <div class="app-name"><a href="/" class="white">Task Manager</a></div>
+        <div class="app-name"><a href="/" class="white">Trello</a></div>
         <div class="current-language">
             <div id="language">
                 <@spring.message code='lang' />
@@ -26,9 +26,8 @@
                 <a href="?lang=en" class="language">English</a>
             </div>
         </div>
-        <div class="link">
-            <a href="${link}" class="white"><i class="fas ${icon}"></i> <@spring.message code='${linkTitle}' /></a>
-        </div>
+        <div class="link"><a href="${link}" class="white"><i
+                class="fas ${icon}"></i> <@spring.message code='${linkTitle}' /></a></div>
     </div>
 </div>
 <#nested>

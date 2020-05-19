@@ -4,7 +4,7 @@ import lombok.SneakyThrows;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import ru.itis.taskmanager.chat.Chat;
-import ru.itis.taskmanager.dto.Client;
+import ru.itis.taskmanager.chat.Client;
 import ru.itis.taskmanager.dto.MessageDto;
 import ru.itis.taskmanager.entity.Board;
 import ru.itis.taskmanager.entity.Message;

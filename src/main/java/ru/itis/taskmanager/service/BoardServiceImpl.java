@@ -1,41 +1,56 @@
 package ru.itis.taskmanager.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import ru.itis.taskmanager.dto.BoardDto;
 import ru.itis.taskmanager.entity.Board;
-import ru.itis.taskmanager.entity.User;
+import ru.itis.taskmanager.entity.BoardMember;
+import ru.itis.taskmanager.entity.BoardMemberKey;
+import ru.itis.taskmanager.repository.BoardMemberRepository;
 import ru.itis.taskmanager.repository.BoardRepository;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
+import java.util.Optional;
 
 @Service
 public class BoardServiceImpl implements BoardService {
     private BoardRepository boardRepository;
+    private BoardMemberRepository boardMemberRepository;
+    @Value("${page.size}")
+    private int pageSize;
 
     @Autowired
-    public BoardServiceImpl(BoardRepository boardRepository) {
+    public BoardServiceImpl(BoardRepository boardRepository, BoardMemberRepository boardMemberRepository) {
         this.boardRepository = boardRepository;
+        this.boardMemberRepository = boardMemberRepository;
     }
 
     @Override
-    public List<BoardDto> getAllBoards(Long userId) {
-        return BoardDto.from(boardRepository.findBoardsByUserId(userId));
+    @Transactional
+    public Page<BoardDto> getBoards(Long memberId, Integer page) {
+        Page<Board> boardPage = boardRepository.getAllBoardsByMemberId(memberId, PageRequest.of(page, pageSize));
+        return boardPage.map(BoardDto::from);
     }
 
     @Override
-    public void save(BoardDto boardDto) {
-        Board board = Board.builder()
+    public Optional<Board> getBoard(Long boardId) {
+        return boardRepository.findById(boardId);
+    }
+
+    @Override
+    @Transactional
+    public void addBoard(BoardDto boardDto) {
+        Board board = boardRepository.save(Board.builder()
                 .title(boardDto.getTitle())
-                .users(new ArrayList<>(Collections.singleton(
-                        User.builder()
-                                .id(boardDto.getUsers().get(0).getId())
-                                .build())
-                ))
-                .build();
-        boardRepository.save(board);
-        boardDto.setId(board.getId());
+                .build());
+        boardMemberRepository.save(BoardMember.builder()
+                .boardMemberKey(BoardMemberKey.builder()
+                        .boardId(board.getId())
+                        .userId(boardDto.getUserId())
+                        .build())
+                .build());
     }
 }
