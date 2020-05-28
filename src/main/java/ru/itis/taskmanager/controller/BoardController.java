@@ -2,47 +2,48 @@ package ru.itis.taskmanager.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.security.core.Authentication;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import ru.itis.taskmanager.dto.BoardDto;
-import ru.itis.taskmanager.dto.UserDto;
-import ru.itis.taskmanager.entity.User;
+import ru.itis.taskmanager.entity.Board;
 import ru.itis.taskmanager.security.details.UserDetailsImpl;
+import ru.itis.taskmanager.service.BoardMemberService;
 import ru.itis.taskmanager.service.BoardService;
+import ru.itis.taskmanager.service.StackService;
 
-import java.util.ArrayList;
-import java.util.Collections;
+import java.util.Optional;
 
 @Controller
-@PreAuthorize("isAuthenticated()")
 public class BoardController {
+    private BoardMemberService boardMemberService;
+    private StackService stackService;
     private BoardService boardService;
 
     @Autowired
-    public BoardController(BoardService boardService) {
+    public BoardController(BoardMemberService boardMemberService, BoardService boardService, StackService stackService) {
+        this.boardMemberService = boardMemberService;
         this.boardService = boardService;
+        this.stackService = stackService;
     }
 
-    @GetMapping("/boards/{id}")
-    public String board(Authentication authentication, @PathVariable("id") Long id, Model model) {
-        User user = ((UserDetailsImpl) authentication.getPrincipal()).getUser();
-        model.addAttribute("boardId", id);
-        model.addAttribute("css", "home");
-        model.addAttribute("link", "/logout");
-        model.addAttribute("linkTitle", "logout");
-        model.addAttribute("userId", user.getId());
+    @PreAuthorize("isAuthenticated()")
+    @GetMapping("/boards/{board_id}")
+    public String board(@PathVariable("board_id") Long boardId, @AuthenticationPrincipal UserDetailsImpl userDetails, Model model) {
+        Optional<Board> boardOptional = boardService.getBoard(boardId);
+        if (!boardOptional.isPresent()) {
+            return "redirect:/error";
+        }
+
+        if (!boardMemberService.isBoardMemberExist(boardId, userDetails.getUser().getId())) {
+            return "redirect:/error";
+        }
+
+        model.addAttribute("stacks", stackService.getStacks(boardId));
+        model.addAttribute("members", boardMemberService.getBoardMembers(boardId));
+        model.addAttribute("board", boardOptional.get());
+        model.addAttribute("userId", userDetails.getUser().getId());
         return "board";
-    }
-
-    @PostMapping("/boards")
-    public String addBoard(Authentication authentication, BoardDto boardDto) {
-        User user = ((UserDetailsImpl) authentication.getPrincipal()).getUser();
-        boardDto.setUsers(new ArrayList<>(Collections.singleton(UserDto.from(user))));
-        boardService.save(boardDto);
-        return "redirect:/";
     }
 }

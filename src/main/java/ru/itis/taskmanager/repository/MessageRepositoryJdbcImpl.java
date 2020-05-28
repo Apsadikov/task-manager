@@ -10,22 +10,18 @@ import ru.itis.taskmanager.entity.Message;
 
 import java.sql.PreparedStatement;
 import java.sql.Statement;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
 @Component
 public class MessageRepositoryJdbcImpl implements MessageRepository {
     private RowMapper<Message> messageRowMapper;
-
-    private UserBoardRepository userBoardRepository;
-
     private JdbcTemplate jdbcTemplate;
 
     @Autowired
-    public MessageRepositoryJdbcImpl(RowMapper<Message> messageRowMapper, UserBoardRepository userBoardRepository, JdbcTemplate jdbcTemplate) {
+    public MessageRepositoryJdbcImpl(RowMapper<Message> messageRowMapper,
+                                     JdbcTemplate jdbcTemplate) {
         this.messageRowMapper = messageRowMapper;
-        this.userBoardRepository = userBoardRepository;
         this.jdbcTemplate = jdbcTemplate;
     }
 
@@ -40,37 +36,31 @@ public class MessageRepositoryJdbcImpl implements MessageRepository {
     }
 
     @Override
-    public void delete(Message id) {
+    public void delete(Long id) {
 
     }
 
     @Override
     public Message save(Message entity) {
-        if (userBoardRepository.isUserHasBoard(entity.getUser().getId(), entity.getBoard().getId())) {
-            KeyHolder keyHolder = new GeneratedKeyHolder();
-            jdbcTemplate.update(connection -> {
-                PreparedStatement statement = connection
-                        .prepareStatement("INSERT INTO message(user_id, board_id, text) VALUE (?, ?, ?)",
-                                Statement.RETURN_GENERATED_KEYS);
-                statement.setLong(1, entity.getUser().getId());
-                statement.setLong(2, entity.getBoard().getId());
-                statement.setString(3, entity.getText());
-                return statement;
-            }, keyHolder);
+        KeyHolder keyHolder = new GeneratedKeyHolder();
+        jdbcTemplate.update(connection -> {
+            PreparedStatement statement = connection
+                    .prepareStatement("INSERT INTO message(user_id, board_id, message) VALUE (?, ?, ?)",
+                            Statement.RETURN_GENERATED_KEYS);
+            statement.setLong(1, entity.getUser().getId());
+            statement.setLong(2, entity.getBoard().getId());
+            statement.setString(3, entity.getMessage());
+            return statement;
+        }, keyHolder);
 
-            entity.setId(keyHolder.getKey().longValue());
-            return entity;
-        }
+        entity.setId(keyHolder.getKey().longValue());
         return entity;
     }
 
     @Override
     public List<Message> getMessages(Long userId, Long boardId, Long messageStartId) {
-        if (userBoardRepository.isUserHasBoard(userId, boardId)) {
-            String sql = "SELECT message.id, board_id, user_id, text, user.name " +
-                    "FROM message INNER JOIN user ON user_id = user.id WHERE board_id = ? AND message.id > ? ORDER BY message.id DESC";
-                return jdbcTemplate.query(sql, new Object[]{boardId, messageStartId}, messageRowMapper);
-        }
-        return new ArrayList<>();
+        String sql = "SELECT message.id, board_id, user_id, message, user.name " +
+                "FROM message INNER JOIN user ON user_id = user.id WHERE board_id = ? AND message.id > ? ORDER BY message.id DESC";
+        return jdbcTemplate.query(sql, new Object[]{boardId, messageStartId}, messageRowMapper);
     }
 }

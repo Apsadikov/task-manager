@@ -50,7 +50,7 @@ public class MessageServiceImpl implements MessageService {
     @Override
     public void addMessage(MessageDto messageDto) {
         Message message = Message.builder()
-                .text(messageDto.getText())
+                .message(messageDto.getText())
                 .user(User.builder().id(messageDto.getUserDto().getId()).build())
                 .board(Board.builder().id(messageDto.getBoardDto().getId()).build())
                 .build();

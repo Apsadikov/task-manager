@@ -1,3 +1,4 @@
+<#import "/spring.ftl" as spring/>
 <!doctype html>
 <html lang="en">
 <head>
@@ -9,24 +10,38 @@
     <link rel="stylesheet" href="/static/css/reset.css">
     <link rel="stylesheet" href="/static/css/base.css">
     <link rel="stylesheet" href="/static/css/board.css">
-    <link rel="stylesheet" href="/static/fontawesome-free-5.13.0-web/css/all.min.css">
+    <link rel="stylesheet" href="/static/fontawesome/css/all.min.css">
 </head>
-<body id="body" data-csrf="${_csrf.token}" data-id="${boardId}" data-user="${userId}">
+<body id="body" data-user-id="${userId}" data-csrf="${_csrf.token}" data-id="${board.getId()}" data-user="${userId}">
 <div class="wrapper">
     <div class="header-wrapper">
         <div class="header-small">
-            <div class="app-name"><a href="/" class="white">Task Manager</a></div>
-            <div class="link"><a href="/logout" class="white"><i class="fas fa-sign-out-alt"></i> Logout</a></div>
+            <div class="app-name"><a href="/" class="white">Trello</a></div>
+            <div class="current-language">
+                <div id="language">
+                <@spring.message code='lang' />
+                </div>
+                <div class="languages shadow" id="languages">
+                    <a href="?lang=ru" class="language">Русский</a>
+                    <a href="?lang=en" class="language">English</a>
+                </div>
+            </div>
+            <div class="link"><a href="/logout" class="white"><i
+                    class="fas fa-sign-out-alt"></i> logout</a></div>
         </div>
         <div class="header-chat">CHAT</div>
     </div>
     <div class="main">
         <div class="board">
             <div class="board-header shadow">
-                <div class="board-title">Title</div>
+                <div class="board-title">${board.getTitle()}</div>
                 <div class="add-member" id="add-member">
                     <i class="fas fa-user-plus"></i>
                     Add member
+                </div>
+                <div class="add-member" id="members">
+                    <i class="fas fa-users"></i>
+                    Members
                 </div>
             </div>
             <div class="search-box hidden" id="search-box">
@@ -39,130 +54,52 @@
                     </div>
                 </div>
             </div>
-            <div class="lists">
-                <div class="list-wrapper first-list">
+            <div class="members-list-wrapper">
+                <div class="members-list shadow" id="members-list">
+                    <#list members as member>
+                        <div class="member" data-container-member-id="${member.id}">
+                            <div class="member-info">
+                                <div class="name">${member.name}</div>
+                            </div>
+                            <div class="delete">
+                                <i class="fas fa-times"
+                                   data-member-id="${member.id}" onclick="deleteMember(${member.id})"></i>
+                            </div>
+                        </div>
+                    </#list>
+                </div>
+            </div>
+            <div class="lists" id="lists">
+                <div id="first-list" class="list-wrapper first-list">
                     <div class="new-list">
                         <div class="new-list-form">
-                            <input type="text" class="input" placeholder="Title..">
-                            <i class="fas fa-check"></i>
+                            <input type="text" class="input" placeholder="Title.." id="stack-title">
+                            <i class="fas fa-check" id="add-stack"></i>
                         </div>
                     </div>
                 </div>
-                <div class="list-wrapper">
-                    <div class="list">
-                        <div class="list-title">Title</div>
-                        <div class="cards">
-                            <div class="card shadow last-card new-card">
-                                <input type="text" placeholder="Title" class="input">
-                                <i class="fas fa-check"></i>
-                            </div>
-                            <div class="card shadow last-card">
-                                <div class="card-title">Card title</div>
-                            </div>
-                            <div class="card shadow last-card">
-                                <div class="card-title">Card title</div>
-                            </div>
-                            <div class="card shadow last-card">
-                                <div class="card-title">Card title</div>
-                            </div>
-                            <div class="card shadow last-card">
-                                <div class="card-title">Card title</div>
-                            </div>
-                            <div class="card shadow last-card">
-                                <div class="card-title">Card title</div>
-                            </div>
-                            <div class="card shadow last-card">
-                                <div class="card-title">Card title</div>
-                            </div>
-                            <div class="card shadow last-card">
-                                <div class="card-title">Card title</div>
-                            </div>
-                            <div class="card shadow last-card">
-                                <div class="card-title">Card title</div>
-                            </div>
-                            <div class="card shadow last-card">
-                                <div class="card-title">Card title</div>
-                            </div>
-                            <div class="card shadow last-card">
-                                <div class="card-title">Card title</div>
-                            </div>
-                            <div class="card shadow last-card">
-                                <div class="card-title">Card title</div>
-                            </div>
-                            <div class="card shadow last-card">
-                                <div class="card-title">Card title</div>
-                            </div>
-                            <div class="card shadow last-card">
-                                <div class="card-title">Card title</div>
-                            </div>
-                        </div>
-                        <div>
-                            <div class="add-small">
-                                <i class="fas fa-plus fa-lg"></i>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="list-wrapper">
-                    <div class="list">
-                        <div class="list-title">Title</div>
-                        <div class="cards">
-                            <div class="card shadow last-card">
-                                <div class="card-title">Card title</div>
-                            </div>
-                            <div class="card shadow last-card">
-                                <div class="card-title">Card title</div>
-                            </div>
-                            <div class="card shadow last-card">
-                                <div class="card-title">Card title</div>
-                            </div>
-                        </div>
-                        <div class="add-small">
-                            <i class="fas fa-plus fa-lg"></i>
-                        </div>
-                    </div>
-                </div>
-                <div class="list-wrapper">
-                    <div class="list">
-                        <div class="list-title">Title</div>
-                        <div class="cards">
-                            <div class="card shadow last-card">
-                                <div class="card-title">Card title</div>
-                            </div>
-                            <div class="card shadow last-card">
-                                <div class="card-title">Card title</div>
-                            </div>
-                            <div class="card shadow last-card">
-                                <div class="card-title">Card title</div>
-                            </div>
-                            <div class="card shadow last-card">
-                                <div class="card-title">Card title</div>
-                            </div>
-                            <div class="card shadow last-card">
-                                <div class="card-title">Card title</div>
-                            </div>
-                            <div class="card shadow last-card">
-                                <div class="card-title">Card title</div>
-                            </div>
-                        </div>
-                        <div class="add-small">
-                            <i class="fas fa-plus fa-lg"></i>
-                        </div>
-                    </div>
-                </div>
-                <div class="list-wrapper last-list">
-                    <div class="list">
-                        <div class="list-title">Title</div>
-                        <div class="cards">
-                            <div class="card shadow last-card">
-                                <div class="card-title">Card title</div>
-                            </div>
-                        </div>
-                        <div class="add-small">
-                            <i class="fas fa-plus fa-lg"></i>
-                        </div>
-                    </div>
-                </div>
+                <#list stacks as stack>
+                     <div class="list-wrapper <#if !stack?has_next>last-list</#if>" id="lists">
+                         <div class="list">
+                             <div class="list-title">${stack.getTitle()}</div>
+                             <div class="cards" data-container-stack-id="${stack.getId()}" ondragover="allowDrag(event)"
+                                  ondrop="drop(event, this)">
+                                 <div data-stack-id="${stack.getId()}" class="card shadow last-card new-card">
+                                     <input type="text" placeholder="Title" class="input"
+                                            data-title-stack-id="${stack.getId()}">
+                                     <i class="fas fa-check" data-add-stack-id="${stack.getId()}"></i>
+                                 </div>
+                                 <#list stack.getCards() as card>
+                                     <div onclick="openCard(this)" draggable="true" data-card-id="${card.getId()}"
+                                          ondragstart="drag(event)"
+                                          class="card shadow last-card">
+                                         <div class="card-title">${card.getTitle()}</div>
+                                     </div>
+                                 </#list>
+                             </div>
+                         </div>
+                     </div>
+                </#list>
             </div>
         </div>
         <div class="chat">
@@ -175,114 +112,51 @@
         </div>
     </div>
 </div>
-<div class="popup hidden">
-    <div class="card-detailed">
-        <div class="card-header">
-            <div class="title-wrapper">
-                <div class="title">
-                    Title
-                </div>
-                <div class="edit">
-                    <i class="fas fa-pen"></i>
-                </div>
-            </div>
-            <div class="comments-header">
-                Comments
-            </div>
-        </div>
-        <div class="main">
-            <div class="card-details-wrapper">
-                <div class="card-details">
-                    <div class="description-title">Description</div>
-                    <div class="description">
-                        Lorem ipsum dolor sit amet, consectetur adipiscing elit. In ac velit purus. Morbi et odio dui.
-                        Aliquam erat volutpat. Pellentesque vel quam id nisl volutpat tincidunt bibendum nec ipsum.
-                        Interdum et malesuada fames ac ante ipsum primis in faucibus. Nullam euismod blandit rhoncus.
-                        Duis vehicula, enim vel ullamcorper pretium, neque augue porta magna, a finibus nisl felis in
-                        orci. Donec at pulvinar justo.
+<div class="popup-wrapper" id="popup">
+    <div class="popup" id="card">
+        <div class="card-detailed">
+            <div class="card-header">
+                <div class="title-wrapper">
+                    <div class="title" id="title"></div>
+                    <div class="close">
+                        <i class="fas  fa-times" onclick="closeCard()"></i>
                     </div>
                 </div>
-                <div class="tools">
-                    <div class="tool"><i class="far fa-clock"></i> Deadline</div>
-                    <div class="tool"><i class="fas fa-user"></i> Member</div>
-                    <div class="tool"><i class="fas fa-folder-open"></i> Attachments</div>
-                    <div class="tool"><i class="fas fa-list"></i> Checklists</div>
-                </div>
-                <div class="members-wrapper">
-                    <div class="members-title">Members</div>
-                    <div class="members">
-                        <div class="member">
-                            <img src="../image/2.png" alt="">
-                        </div>
-                        <div class="member">
-                            <img src="../image/3.png" alt="">
-                        </div>
-                        <div class="member">
-                            <img src="../image/4.png" alt="">
-                        </div>
-                    </div>
+                <div class="comments-header">
+                    Comments
                 </div>
             </div>
-            <div class="comments-wrapper">
-                <div class="comments">
-                    <div class="light-comment-wrapper">
-                        <div class="avatar">
-                            <img src="../image/2.png" alt="">
+            <div class="main">
+                <div class="card-details-wrapper">
+                    <div class="card-details">
+                        <div class="description">
+                            <div class="description-title">Description</div>
+                            <textarea class="description-input" id="description"></textarea>
                         </div>
-                        <div class="light-comment">
-                            <div class="name">User</div>
-                            Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+                        <div class="deadline">
+                            <label class="deadline-title" for="deadline">Deadline</label>
+                            <input type="date" class="deadline-input" id="deadline">
                         </div>
-                    </div>
-                    <div class="light-comment-wrapper">
-                        <div class="avatar">
-                            <img src="../image/2.png" alt="">
+                        <div class="tools">
+                            <div class="tool"><i class="far fa-file-archive" id="upload"></i></div>
                         </div>
-                        <div class="light-comment">
-                            <div class="name">User</div>
-                            Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+                        <input id="file" type="file" name="file" style="display: none;"/>
+                        <div id="files-list" class="files">
                         </div>
                     </div>
-                    <div class="light-comment-wrapper">
-                        <div class="avatar">
-                            <img src="../image/3.png" alt="">
-                        </div>
-                        <div class="light-comment">
-                            <div class="name">User</div>
-                            Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-                        </div>
-                    </div>
-                    <div class="light-comment-wrapper">
-                        <div class="avatar">
-                            <img src="../image/3.png" alt="">
-                        </div>
-                        <div class="light-comment">
-                            <div class="name">User</div>
-                            Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-                        </div>
-                    </div>
-                    <div class="light-comment-wrapper">
-                        <div class="avatar">
-                            <img src="../image/3.png" alt="">
-                        </div>
-                        <div class="light-comment">
-                            <div class="name">User</div>
-                            Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-                        </div>
-                    </div>
-                    <div class="light-comment-wrapper">
-                        <div class="avatar">
-                            <img src="../image/3.png" alt="">
-                        </div>
-                        <div class="light-comment">
-                            <div class="name">User</div>
-                            Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-                        </div>
+                    <div id="map-wrapper">
+                        <div id="map" class="map"></div>
                     </div>
                 </div>
-                <div class="comment-box">
-                    <input type="text" class="text" placeholder="Comment..">
-                    <div class="button"><i class="fas fa-paper-plane"></i></div>
+                <div class="comments-wrapper">
+                    <div class="comments" id="comments">
+                    </div>
+                    <div class="comment-box">
+                        <div class="member-hint" id="members-hint">
+                        </div>
+                        <input type="text" class="text" placeholder="Comment.." id="comment-text">
+                        <div class="button"><i class="fas fa-paper-plane" id="send-comment"></i></div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -292,6 +166,8 @@
         src="https://code.jquery.com/jquery-3.4.1.min.js"
         integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo="
         crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/sockjs-client@1/dist/sockjs.min.js"></script>
+<script src="/static/js/card.js"></script>
 <script src="/static/js/board.js"></script>
 </body>
 </html>

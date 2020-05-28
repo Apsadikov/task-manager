@@ -7,8 +7,8 @@
         <form action="/add" class="new-board" method="post">
                 <@spring.bind 'addBoardForm.title'/>
                 <@spring.formInput path="addBoardForm.title" attributes="class=input placeholder=Title"/>
-                <input type="hidden" id="csrf" value="${_csrf.token}" name="${_csrf.parameterName}">
-                <button><i class="fas fa-check" id="save"></i></button>
+            <input type="hidden" id="csrf" value="${_csrf.token}" name="${_csrf.parameterName}">
+            <button><i class="fas fa-check" id="save"></i></button>
             <input type="hidden" id="csrf" value="${_csrf.token}" name="${_csrf.parameterName}">
         </form>
         <div class="error"><@spring.showErrors "<br>"/></div>

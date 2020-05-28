@@ -33,7 +33,7 @@ public class ConfirmationEmailServiceImpl implements EmailService {
         try {
             MimeMessageHelper mimeMessageHelper = new MimeMessageHelper(mimeMessage, true);
             mimeMessageHelper.setSubject(mailDto.getSubject());
-            mimeMessageHelper.setFrom("Donponchik18@gmail.com"); //TODO fix
+            mimeMessageHelper.setFrom(mailDto.getFrom());
             mimeMessageHelper.setTo(mailDto.getTo());
             mimeMessageHelper.setText(getContentFromTemplate(mailDto), true);
 

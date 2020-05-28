@@ -39,7 +39,7 @@ public class UserRepositoryJdbcTemplateImpl implements UserRepository {
     }
 
     @Override
-    public void delete(User id) {
+    public void delete(Long id) {
 
     }
 

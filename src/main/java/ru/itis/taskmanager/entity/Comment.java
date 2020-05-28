@@ -10,8 +10,8 @@ import javax.persistence.*;
 @Getter
 @Setter
 @Builder
-@Table(name = "message")
-public class Message {
+@Table(name = "comment")
+public class Comment {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -24,6 +24,6 @@ public class Message {
     private User user;
 
     @ManyToOne
-    @JoinColumn(name = "board_id")
-    private Board board;
+    @JoinColumn(name = "card_id")
+    private Card card;
 }

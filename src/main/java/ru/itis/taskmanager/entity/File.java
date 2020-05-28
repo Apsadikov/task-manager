@@ -3,23 +3,24 @@ package ru.itis.taskmanager.entity;
 import lombok.*;
 
 import javax.persistence.*;
-import java.util.List;
 
 @AllArgsConstructor
 @NoArgsConstructor
-@Builder
-@Entity
 @Getter
 @Setter
-@Table(name = "board")
-public class Board {
+@Builder
+@Entity
+@Table(name = "file")
+public class File {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false)
-    private String title;
+    @ManyToOne
+    @JoinColumn(name = "card_id")
+    private Card card;
 
-//    @OneToMany(mappedBy = "board")
-//    private List<BoardMember> boardMembers;
+    @Column(name = "file", nullable = false)
+    private String file;
+
 }

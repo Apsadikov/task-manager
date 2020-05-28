@@ -4,16 +4,13 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-
-import javax.validation.constraints.NotEmpty;
+import ru.itis.taskmanager.util.validation.Title;
 
 @AllArgsConstructor
 @NoArgsConstructor
-@Builder
 @Data
-public class AddMemberDto {
-
-    @NotEmpty(message = "{error.name.empty}")
-    private String name;
+@Builder
+public class AddStackForm {
+    @Title
+    private String title;
 }
-

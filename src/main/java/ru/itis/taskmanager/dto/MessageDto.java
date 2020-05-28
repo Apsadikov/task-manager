@@ -24,7 +24,7 @@ public class MessageDto {
                 .id(message.getId())
                 .boardDto(BoardDto.from(message.getBoard()))
                 .userDto(UserDto.from(message.getUser()))
-                .text(message.getText())
+                .text(message.getMessage())
                 .build();
     }
 

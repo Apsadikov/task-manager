@@ -8,7 +8,7 @@ public interface CrudRepository<E, T> {
 
     Optional<E> findById(T id);
 
-    void delete(E id);
+    void delete(T id);
 
     E save(E entity);
 }

@@ -1,15 +1,16 @@
-package ru.itis.taskmanager.entity;
+package ru.itis.taskmanager.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import ru.itis.taskmanager.util.validation.Title;
 
 @AllArgsConstructor
 @NoArgsConstructor
 @Data
 @Builder
-public class UserBoard {
-    private User user;
-    private Board board;
+public class AddCardForm {
+    @Title
+    private String title;
 }

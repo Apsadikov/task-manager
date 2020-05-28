@@ -2,30 +2,27 @@ package ru.itis.taskmanager.rest;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
-import ru.itis.taskmanager.dto.AddMemberDto;
 import ru.itis.taskmanager.dto.UserDto;
-import ru.itis.taskmanager.service.AccountService;
+import ru.itis.taskmanager.service.UserService;
 
-import javax.validation.Valid;
-import java.util.ArrayList;
 import java.util.List;
 
 @Controller
 public class UserRestController {
-    private AccountService accountService;
+    private UserService userService;
 
     @Autowired
-    public UserRestController(AccountService accountService) {
-        this.accountService = accountService;
+    public UserRestController(UserService userService) {
+        this.userService = userService;
     }
 
     @ResponseBody
-    @RequestMapping(value = "/api/users")
-    public List<UserDto> findMembers(@Valid AddMemberDto addMemberDto, BindingResult bindingResult) {
-//        return accountService.findUsers(addMemberDto.getName());
-        return new ArrayList<>();
+    @RequestMapping(value = "/api/users", method = RequestMethod.GET)
+    public List<UserDto> getUsers(@RequestParam(value = "name") String name) {
+        return userService.findUserByName(name);
     }
 }

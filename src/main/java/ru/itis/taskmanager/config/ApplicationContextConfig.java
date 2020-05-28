@@ -1,5 +1,7 @@
 package ru.itis.taskmanager.config;
 
+import com.zaxxer.hikari.HikariConfig;
+import com.zaxxer.hikari.HikariDataSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.MessageSource;
@@ -16,6 +18,9 @@ import org.springframework.jdbc.datasource.DriverManagerDataSource;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.JavaMailSenderImpl;
 import org.springframework.orm.jpa.JpaTransactionManager;
+import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
+import org.springframework.orm.jpa.vendor.Database;
+import org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.authentication.rememberme.JdbcTokenRepositoryImpl;
 import org.springframework.security.web.authentication.rememberme.PersistentTokenRepository;
@@ -53,7 +58,7 @@ public class ApplicationContextConfig {
     @Bean
     public PersistentTokenRepository persistentTokenRepository() {
         JdbcTokenRepositoryImpl jdbcTokenRepository = new JdbcTokenRepositoryImpl();
-        jdbcTokenRepository.setDataSource(driverManagerDataSource());
+        jdbcTokenRepository.setDataSource(hikariDataSource());
         return jdbcTokenRepository;
     }
 
@@ -89,17 +94,22 @@ public class ApplicationContextConfig {
 
     @Bean
     public JdbcTemplate jdbcTemplate() {
-        return new JdbcTemplate(driverManagerDataSource());
+        return new JdbcTemplate(hikariDataSource());
     }
 
     @Bean
-    public DataSource driverManagerDataSource() {
-        DriverManagerDataSource dataSource = new DriverManagerDataSource();
-        dataSource.setDriverClassName(environment.getProperty("db.driver"));
-        dataSource.setUrl(environment.getProperty("db.url"));
-        dataSource.setUsername(environment.getProperty("db.user"));
-        dataSource.setPassword(environment.getProperty("db.password"));
-        return dataSource;
+    public HikariConfig hikariConfig() {
+        HikariConfig config = new HikariConfig();
+        config.setJdbcUrl(environment.getProperty("db.url"));
+        config.setUsername(environment.getProperty("db.user"));
+        config.setPassword(environment.getProperty("db.password"));
+        config.setDriverClassName(environment.getProperty("db.driver"));
+        return config;
+    }
+
+    @Bean
+    public DataSource hikariDataSource() {
+        return new HikariDataSource(hikariConfig());
     }
 
     @Bean
@@ -141,11 +151,6 @@ public class ApplicationContextConfig {
         return bean;
     }
 
-    @Bean
-    public PlatformTransactionManager transactionManager(DataSource dataSource) {
-        return new DataSourceTransactionManager(dataSource);
-    }
-
     @Bean(name = "mailProperties")
     public Properties mailProperties() {
         Properties mailProperties = new Properties();
@@ -175,10 +180,29 @@ public class ApplicationContextConfig {
     }
 
     @Bean
+    public LocalContainerEntityManagerFactoryBean entityManagerFactory() {
+        HibernateJpaVendorAdapter hibernateJpaVendorAdapter = new HibernateJpaVendorAdapter();
+        hibernateJpaVendorAdapter.setDatabase(Database.MYSQL);
+        LocalContainerEntityManagerFactoryBean entityManagerFactory = new LocalContainerEntityManagerFactoryBean();
+        entityManagerFactory.setDataSource(hikariDataSource());
+        entityManagerFactory.setPackagesToScan("ru.itis.taskmanager.entity");
+        entityManagerFactory.setJpaVendorAdapter(hibernateJpaVendorAdapter);
+        entityManagerFactory.setJpaProperties(jpaProperties());
+        return entityManagerFactory;
+    }
+
+    private Properties jpaProperties() {
+        Properties properties = new Properties();
+        properties.setProperty("hibernate.hbm2ddl.auto", environment.getProperty("spring.jpa.hibernate.ddl-auto"));
+        properties.setProperty("hibernate.dialect", environment.getProperty("hibernate.dialect"));
+        properties.setProperty("hibernate.show_sql", environment.getProperty("hibernate.show_sql"));
+        return properties;
+    }
+
+    @Bean
     public JpaTransactionManager transactionManager(EntityManagerFactory entityManagerFactory) {
         JpaTransactionManager transactionManager = new JpaTransactionManager();
         transactionManager.setEntityManagerFactory(entityManagerFactory);
-
         return transactionManager;
     }
 }

@@ -25,7 +25,7 @@ public class MessageRowMapper implements RowMapper<Message> {
                         .name(rs.getString("name"))
                         .build()
                 )
-                .text(rs.getString("text"))
+                .message(rs.getString("message"))
                 .build();
     }
 }
